@@ -1,0 +1,30 @@
+{
+    "name": "hkt/psr7-asset-cache",
+    "description": "Cli script to manage PSR-7 assets cache",
+    "type": "library",
+    "require": {
+        "symfony/console": "^3.0",
+        "hkt/psr7-asset": "1.*"
+    },
+    "require-dev": {
+        "http-interop/http-factory-diactoros": "^0.2.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hari KT",
+            "email": "kthari85@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Hkt\\Psr7AssetCache\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}
