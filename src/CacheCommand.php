@@ -6,6 +6,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class CacheCommand extends Command
 {
@@ -28,10 +31,47 @@ class CacheCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Docroot: '.$input->getArgument('docroot'));
+        $publicFolder = realpath($input->getArgument('docroot'));
+
+        if (! $publicFolder) {
+            $output->writeln("Cannot understand the path");
+            return;
+        }
+
+        $assetFolder = $publicFolder . DIRECTORY_SEPARATOR . 'asset' . DIRECTORY_SEPARATOR;
+
+        $assets = [];
 
         foreach ($this->assetLocator->getIterator() as $key => $value ) {
-            echo "$key $value " . PHP_EOL;
+            $assets = array_merge($assets, $this->getAssets($key, $value));
         }
+
+        foreach($assets as $map => $file) {
+            $destination = $assetFolder . DIRECTORY_SEPARATOR . $map;
+            if (! is_dir(dirname($destination))) {
+                mkdir(dirname($destination), 0755, true);
+            }
+            copy($file, $assetFolder . $map);
+        }
+    }
+
+    protected function getAssets($key, $value)
+    {
+        $assets = [];
+
+        if (is_dir($value)) {
+            $directory = new RecursiveDirectoryIterator($value, FilesystemIterator::SKIP_DOTS);
+            $iterator = new RecursiveIteratorIterator($directory);
+            foreach ($iterator as $info) {
+                $map = str_replace($value, '', $info->getPathname());
+                $assets[$key . $map] = $info->getPathname();
+            }
+        }
+
+        if (is_file($value)) {
+            $assets[$key] = $value;
+        }
+
+        return $assets;
     }
 }

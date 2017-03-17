@@ -10,4 +10,6 @@ could have a clear command, but doesn't know where the docroot is.
 The docroot can be obtained from the cli, but if wrong root path is given,
 it will delete all the directories recursively.
 
-To make it simple, there will be a clear command script provided in the examples folder.
+## Tests
+
+Tests will followup.
