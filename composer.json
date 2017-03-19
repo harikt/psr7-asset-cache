@@ -4,7 +4,7 @@
     "type": "library",
     "require": {
         "symfony/console": "^3.0",
-        "hkt/psr7-asset": "1.*"
+        "hkt/psr7-asset": "^0.2"
     },
     "require-dev": {
         "http-interop/http-factory-diactoros": "^0.2.0"
